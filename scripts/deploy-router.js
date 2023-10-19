@@ -2,29 +2,26 @@ require("dotenv").config();
 const { verify, networkHasVerification } = require("./utils.js");
 const { task } = require("hardhat/config");
 
-task("deploy-router", "Deploy UniswapV2Router contract")
-.addParam("factory", "factory address")
-.addParam("weth", "weth address")
+task("deploy-router", "Deploy UniswapV2Factory contract")
 .setAction(async (taskArgs, hre) => {
     let [admin,user] = await hre.ethers.getSigners();
     console.log("The admin address: ", admin.address);
-    console.log("The a2 address: ", user.address);
-
-    console.log("Deploying UniswapV2Router...");
-    const V2RouterContract = await hre.ethers.getContractFactory(
-      "UniswapV2Router02"
+    console.log("The user address: ", user.address);
+    
+    console.log("Deploying UniswapV2Factory...");
+    const V2FactoryContract = await hre.ethers.getContractFactory(
+      "UniswapV2Factory"
     );
 
-    const router = await V2RouterContract.connect(user).deploy(
-     taskArgs.factory,taskArgs.weth
+    const factory = await V2FactoryContract.connect(user).deploy(
+      user.address
     );
-    await router.waitForDeployment();
+    await factory.waitForDeployment();
 
-    console.log(`UniswapV2Router deployed to ${await router.getAddress()}`);
+    console.log(`UniswapV2Factory deployed to ${factory.target}`);
     if (networkHasVerification(hre.network.config.chainId)) {
       console.log("Waiting for block confirmations...");
-      await router.deploymentTransaction().wait(2);
-      await verify(await router.getAddress(),[taskArgs.factory,taskArgs.weth]);
+      await verify(factory.target,[user.address]);
     }
-    return router;
+    return factory.target;
   });

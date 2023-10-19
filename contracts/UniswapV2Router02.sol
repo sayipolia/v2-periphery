@@ -8,6 +8,7 @@ import './libraries/UniswapV2Library.sol';
 import './libraries/SafeMath.sol';
 import './interfaces/IERC20.sol';
 import './interfaces/IWETH.sol';
+import 'hardhat/console.sol';
 
 contract UniswapV2Router02 is IUniswapV2Router02 {
     using SafeMath for uint;
@@ -70,6 +71,9 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
     ) external virtual override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
         (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
+        console.log("pair: %s", pair);
+        console.logUint(amountA);
+        console.logUint(amountB);
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
         liquidity = IUniswapV2Pair(pair).mint(to);

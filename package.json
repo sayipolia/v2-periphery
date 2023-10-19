@@ -27,7 +27,7 @@
     "dotenv-defaults": "^5.0.2",
     "ethereum-waffle": "^2.4.1",
     "ethereumjs-util": "^6.2.0",
-    "ethers": "^6.7.1",
+    "ethers": "^6.8.0",
     "hardhat": "^2.18.0",
     "mocha": "^6.2.2",
     "ncp": "^2.0.0",
