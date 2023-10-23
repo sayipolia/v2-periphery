@@ -62,7 +62,7 @@ async function main() {
     console.log("approves");
 
     //https://www.epochconverter.com/
-    const timestamp = 1699722622;
+    const timestamp = 1698201335;
     const amountMinA = ethers.parseUnits("1").toString();
     const amountMinB = ethers.parseUnits("1").toString();
 
@@ -78,6 +78,24 @@ async function main() {
 
     const reservesPair = await pair.getReserves();
     console.log(`reservesPair ${reservesPair}`);
+
+    const path = [tokenA.target, tokenB.target];
+
+    const getAmountsIn = await router02Instance.connect(owner).getAmountsIn(ethers.parseUnits("0.2"), path);
+    console.log(`getAmountsIn, ${getAmountsIn}`);
+
+    const swapTX = await router02Instance
+    .connect(owner)
+    .swapExactTokensForTokens(getAmountsIn[0],getAmountsIn[1], path,
+        owner.address, timestamp, { gasLimit: 540000 });
+   
+   await swapTX.wait(1);
+
+  console.log(
+    `SwapTokens: ${swapTX}`
+  );
+
+
 }
 
 main()

@@ -18,9 +18,11 @@ task("get-amounts", "Get amounts")
     )).attach(taskArgs.router);
 
     const path = [taskArgs.tokenA, taskArgs.tokenB];
-    const getAmountsIn = await V2RouterContract.connect(owner).getAmountsIn(ethers.parseUnits("0.5"), path);
+    console.log('amounsIn', ethers.parseUnits("0.2"));
+    const getAmountsIn = await V2RouterContract.connect(owner).getAmountsIn(ethers.parseUnits("0.2"), path);
     console.log(`getAmountsIn, ${getAmountsIn}`);
 
+    console.log('amounsOut', ethers.parseUnits("1"));
     const getAmountsOut = await V2RouterContract.connect(owner).getAmountsOut(ethers.parseUnits("1"), path);
     console.log(`getAmountsOut, ${getAmountsOut}`);
     return "";
